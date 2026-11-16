@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#1f3d2b">
+
+  <!-- PWA Apple / iPad -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ForEval Cubage">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <title>ForEval Cubage</title>
+
+</head>
+<body>
+
+<!-- 1.2.01 : bandeaux mise à jour et alerte stockage -->
+<div id="updateBanner" class="app-banner hidden" role="status">
+  <span class="banner-text">🔄 Une nouvelle version de ForEval Cubage est prête.</span>
+  <span class="banner-actions"><button id="updateApply" class="primary" type="button">Mettre à jour</button><button id="updateLater" class="secondary" type="button">Plus tard</button></span>
+</div>
+<div id="storageAlert" class="app-banner alert hidden" role="alert">
+  <span class="banner-text">⚠️ Enregistrement impossible.</span>
+  <span class="banner-actions"><button id="storageAlertExport" class="primary" type="button">Exporter la session (JSON)</button></span>
+</div>
+
+<header>
+  <div class="header-line">
+    <div>
+      <div class="brand-lockup"><img src="symbole-foreval-cubage.png" alt="ForEval" class="brand-symbol"><div><h1>ForEval Cubage</h1>
+      <p>1.2.01 — carte et données hors ligne</p></div></div>
+      <div id="sessionBadge" class="session-badge">Session active</div>
+      <div id="gpsStatus" class="gps-status gps-off">GPS désactivé</div>
+    </div>
+    <div class="mode-toggles">
+      <button id="gloveToggle" class="glove-toggle">🌧️ Pluie</button>
+      <button id="bigFingerToggle" class="glove-toggle">🖐️ Gros doigts</button>
+      <button id="gpsToggle" class="glove-toggle">📍 GPS</button>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <button data-tab="modeEmploi" class="active">Mode d'emploi</button>
+  <button data-tab="sessions">Sessions</button>
+  <button data-tab="parametrages">Paramétrages</button>
+  <button data-tab="tarifs">Tarifs</button>
+  <button data-tab="saisie">Saisie</button>
+  <button data-tab="liste">Liste</button>
+  <button data-tab="carte">Carte</button>
+  <button data-tab="synthese">Synthèse</button>
+</nav>
+
+<main>
+
+<!-- ─── SESSIONS ─────────────────────────────────────────── -->
+<section id="sessions" class="tab">
+  <div class="card">
+    <h2>Sessions sauvegardées</h2>
+    <p class="muted">Chaque chantier est sauvegardé automatiquement. Vous pouvez commencer une autre propriété puis revenir ici pour reprendre une saisie.</p>
+    <button id="newSession" class="primary">+ Nouvelle session</button>
+    <div id="sessionsList"></div>
+  </div>
+  <div class="card">
+    <h2>Sécurité des données</h2>
+    <div id="dataSafetyStatus" class="data-safety"></div>
+    <p class="muted">Les sessions sont enregistrées sur cet appareil à chaque saisie. Une copie de secours de la session est gardée au plus toutes les 5 minutes, et avant chaque suppression ou mise à jour. L’export JSON reste la seule sauvegarde hors de l’appareil : faites-le en fin de journée.</p>
+    <button id="backupNow" class="secondary" type="button">Créer une copie de secours maintenant</button>
+    <h3>Copies de secours</h3>
+    <div id="backupList"></div>
+  </div>
+</section>
+
+<!-- ─── PARAMÉTRAGES ──────────────────────────────────────── -->
+<section id="parametrages" class="tab">
+  <div class="card">
+    <h2>Paramétrages du chantier</h2>
+    <label>Nom du fichier</label>
+    <input id="chantier" placeholder="ex : Cubage forêt parcelle 12" />
+    <label>Martelage / estimation</label>
+    <input id="martelage" placeholder="Ex : Prénom et Nom" />
+    <label>Observations / points importants</label>
+    <textarea id="observations" placeholder="Observations importantes"></textarea>
+    <label>Entrée libre</label>
+    <textarea id="libre" placeholder="Champ libre"></textarea>
+    <p class="muted">Ces informations seront reprises dans les exports.</p>
+  </div>
+</section>
+
+<!-- ─── TARIFS ─────────────────────────────────────────────── -->
+<section id="tarifs" class="tab">
+  <div class="card feuillus-settings">
+    <h2>🌳 Tarifs feuillus par essence</h2>
+    <p class="muted">Choisissez le tarif de cubage actif pour chaque essence feuillue. Les tables Adrian I, Adrian II, Adrian IV et Chaudé 8 à 12 sont intégrées dans la bibliothèque des tarifs.</p>
+    <div id="feuillusTarifs" class="tariff-grid"></div>
+  </div>
+  <div class="card resineux-settings">
+    <h2>🌲 Tarifs Schaeffer rapides — résineux</h2>
+    <p class="muted">Pour chaque essence résineuse, choisissez soit Schaeffer rapide, soit un tarif Adrian / Chaudé. En Schaeffer, seul le diamètre est nécessaire ; en Adrian / Chaudé, la hauteur bois d’œuvre devient obligatoire.</p>
+    <div id="resineuxTarifs" class="tariff-grid"></div>
+  </div>
+</section>
+
+<!-- ─── SAISIE — layout deux colonnes sur iPad ─────────────── -->
+<section id="saisie" class="tab">
+
+  <!-- COLONNE GAUCHE : sélecteurs -->
+  <div class="col-left">
+
+    <div class="card" id="parcelleCard">
+      <div class="section-head">
+        <h2>Parcelle forestière</h2>
+        <button id="addParcelle" class="mini plus" title="Ajouter une parcelle">+</button>
+      </div>
+      <div id="parcelles" class="grid buttons"></div>
+    </div>
+
+    <div class="card" id="essenceCard">
+      <h2>Essence</h2>
+      <div id="essences" class="grid essence-grid buttons"></div>
+      <div id="essencePicker" class="picker hidden">
+        <label>Ajouter une essence à l'écran principal</label>
+        <select id="essenceSelect"></select>
+        <button id="confirmEssence" class="secondary">Ajouter cette essence</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>État / qualité optionnelle</h2>
+      <div id="qualites" class="grid essence-grid buttons"></div>
+      <p class="muted quality-resume">Sélection : <span id="qualiteResume">sain</span></p>
+      <div id="qualitePicker" class="picker hidden">
+        <label>Ajouter un état / une qualité</label>
+        <select id="qualiteSelect"></select>
+        <input id="qualiteInput" type="text" placeholder="Ou saisir un nouvel état">
+        <button id="confirmQualite" class="secondary">Ajouter cette qualité</button>
+      </div>
+    </div>
+
+    <div class="card" id="commentCard">
+      <h2>Commentaire arbre</h2>
+      <textarea id="treeComment" class="tree-comment" placeholder="Commentaire optionnel : défaut, accès, arbre remarquable…"></textarea>
+    </div>
+
+    <div class="card">
+      <h2>Diamètre à 1,30 m <span id="diametreValue">—</span> cm</h2>
+      <div id="diametres" class="grid diameter-grid small buttons"></div>
+    </div>
+
+    <div class="card" id="hauteurCard">
+      <h2>Hauteur bois d'œuvre <span id="hauteurValue">—</span> m</h2>
+      <div id="hauteurs" class="grid small buttons"></div>
+    </div>
+
+    <div class="card" id="cheneSupCard">
+      <h2>Chêne supérieur</h2>
+      <div id="supOptions">
+        <h3>Hauteur qualité supérieure <span id="supHauteurValue">—</span> m</h3>
+        <div id="supHauteurs" class="grid small buttons"></div>
+      </div>
+    </div>
+
+  </div><!-- /col-left -->
+
+  <!-- COLONNE DROITE : prévisualisation + derniers arbres -->
+  <div class="col-right">
+
+    <div class="card result">
+      <h2>Prévisualisation</h2>
+      <div id="preview">Sélectionnez une essence, un diamètre et une hauteur.</div>
+      <div class="batch-row"><label for="treeQuantity">Nombre d’arbres identiques</label><input id="treeQuantity" type="number" min="1" max="500" step="1" inputmode="numeric" value="1"></div>
+      <label class="keep-row"><input id="keepDimensionsMode" type="checkbox"> Conserver Ø / hauteur après ajout</label>
+      <button id="addTree" class="primary">Ajouter l'arbre</button>
+      <button id="addSameTree" class="secondary">⚡ +1 arbre identique au dernier</button>
+      <button id="duplicateTree" class="secondary">🔁 Reprendre dernier arbre</button>
+      <button id="cancelEdit" class="secondary hidden">Annuler la modification</button>
+      <div id="feedbackToast" class="feedback-toast hidden"></div>
+    </div>
+
+    <div class="card" id="lastTreesCard">
+      <h2>Derniers arbres modifiables</h2>
+      <div id="lastTrees"></div>
+    </div>
+
+  </div><!-- /col-right -->
+
+</section>
+
+<!-- ─── LISTE DES ARBRES ─────────────────────────────────── -->
+<section id="liste" class="tab">
+  <div class="card">
+    <h2>Liste des arbres saisis</h2>
+    <p class="muted">Tous les arbres apparaissent dans l’ordre réel de saisie. Vous pouvez filtrer, modifier un arbre, le supprimer, le dupliquer ou compléter son commentaire.</p>
+    <div class="list-controls">
+      <label>Filtrer par parcelle
+        <select id="listFilterParcelle"><option value="">Toutes les parcelles</option></select>
+      </label>
+      <label>Filtrer par essence
+        <select id="listFilterEssence"><option value="">Toutes les essences</option></select>
+      </label>
+      <label>Recherche
+        <input id="listSearch" type="search" placeholder="N°, essence, commentaire…">
+      </label>
+    </div>
+    <div id="treeListStats" class="muted"></div>
+    <div id="treeList" class="tree-list-table"></div>
+  </div>
+</section>
+
+<!-- ─── CARTE INTERACTIVE ───────────────────────────────────── -->
+<section id="carte" class="tab">
+  <div class="card map-card">
+    <div class="section-head">
+      <div>
+        <h2>Carte des arbres géoréférencés</h2>
+        <p class="muted">Affichage des arbres GPS avec couleur par essence et numéro visible. La carte est un outil de contrôle ; QGIS reste l’outil d’analyse avancée.</p>
+      </div>
+    </div>
+    <div class="map-toolbar map-toolbar-181">
+      <button id="mapCenterGps" class="secondary">📍 Centrer sur ma position</button>
+      <button id="mapFitTrees" class="secondary">🌳 Voir tous les arbres</button>
+      <label>Fond
+        <select id="mapBaseLayer">
+          <option value="osm">OpenStreetMap</option>
+          <option value="satellite">Orthophoto / satellite</option>
+          <option value="topo">OpenTopoMap</option>
+          <option value="cartoLight">Carto clair</option>
+          <option value="ignPlan">IGN Plan</option>
+          <option value="ignOrtho">IGN Orthophotos</option>
+        </select>
+      </label>
+      <label>Parcelle
+        <select id="mapFilterParcelle"><option value="">Toutes</option></select>
+      </label>
+      <label>Essence
+        <select id="mapFilterEssence"><option value="">Toutes</option></select>
+      </label>
+      <label>N° arbre
+        <input id="mapSearch" type="search" placeholder="ex : 127">
+      </label>
+    </div>
+    <div class="map-overlays">
+      <label><input id="mapOverlayTrees" type="checkbox" checked> Arbres</label>
+      <label><input id="mapOverlayNumbers" type="checkbox" checked> Numéros</label>
+      <label><input id="mapOverlayGps" type="checkbox" checked> Position GPS</label>
+      <label><input id="mapOverlayTrace" type="checkbox" checked> Trace GPS</label>
+      <label><input id="mapOverlayCadastre" type="checkbox"> Cadastre</label>
+    </div>
+    <div class="map-trace-panel" id="tracePanel">
+      <div class="trace-head">
+        <strong>Trace de parcours</strong>
+        <span id="traceRecordingStatus" class="trace-pill">arrêtée</span>
+      </div>
+      <div class="trace-controls">
+        <button id="traceStart" class="secondary" type="button">▶ Démarrer</button>
+        <button id="traceStop" class="secondary" type="button">■ Arrêter</button>
+        <button id="traceClear" class="secondary" type="button">🗑 Effacer</button>
+      </div>
+      <label class="trace-distance">Distance entre deux points
+        <select id="traceMinDistance">
+          <option value="3">3 m</option>
+          <option value="5" selected>5 m</option>
+          <option value="10">10 m</option>
+        </select>
+      </label>
+      <div id="traceStats" class="trace-stats muted">Trace non démarrée.</div>
+      <div id="traceWakeStatus" class="trace-wake muted"></div>
+      <div class="trace-controls trace-exports">
+        <button id="traceExportGeoJson" class="secondary" type="button">Exporter trace GeoJSON</button>
+        <button id="traceExportGpx" class="secondary" type="button">Exporter trace GPX</button>
+      </div>
+    </div>
+    <div class="map-offline-panel" id="offlinePanel">
+      <div class="trace-head">
+        <strong>Carte hors ligne</strong>
+        <span id="offlineNetwork" class="net-pill">…</span>
+      </div>
+      <p class="muted">Avant de partir, cadrez la propriété puis enregistrez la zone. Fonds enregistrables : IGN (conditions d’usage ouvertes).</p>
+      <div class="offline-options">
+        <label><input id="offline_ignPlan" type="checkbox" checked> IGN Plan</label>
+        <label><input id="offline_ignOrtho" type="checkbox" checked> IGN Orthophotos</label>
+        <label><input id="offline_cadastre" type="checkbox" checked> Cadastre</label>
+        <label>Zoom maximal
+          <select id="offlineMaxZoom">
+            <option value="16">16 (vue d’ensemble)</option>
+            <option value="17" selected>17 (parcelle)</option>
+            <option value="18">18 (détail)</option>
+            <option value="19">19 (très détaillé, lourd)</option>
+          </select>
+        </label>
+      </div>
+      <div class="trace-controls">
+        <button id="offlineDownload" class="secondary" type="button">⬇ Enregistrer la zone affichée</button>
+        <button id="offlineCancel" class="secondary hidden" type="button">Interrompre</button>
+        <button id="offlineClear" class="secondary" type="button">🗑 Vider le cache carte</button>
+      </div>
+      <div id="offlineProgress" class="offline-progress muted"></div>
+      <div id="offlineCacheInfo" class="muted"></div>
+    </div>
+    <div id="mapStatus" class="map-status muted">Carte prête.</div>
+    <div id="treeMap" class="tree-map"></div>
+    <p class="muted">Hors réseau, la carte affiche les zones enregistrées ci-dessus et celles déjà consultées. Les arbres, la position GPS et la trace s’affichent toujours, même sur fond vide.</p>
+  </div>
+</section>
+
+<!-- ─── SYNTHÈSE ──────────────────────────────────────────── -->
+<section id="synthese" class="tab">
+  <div class="card"><h2>Synthèse par essence</h2><div id="summary"></div></div>
+  <div class="card"><h2>Résumé terrain par parcelle</h2><div id="terrainResume"></div></div>
+  <div class="card"><h2>Analyse peuplement simple</h2><div id="standAnalysis"></div></div>
+  <div class="card"><h2>Tarifs feuillus complémentaires préparés</h2><p class="muted">Ces tarifs sont préparés dans l'architecture, mais restent désactivés tant que les tables ou formules ne sont pas validées.</p><div id="feuillusTariffsPrep" class="tariff-prep-grid"></div></div>
+  <div class="card"><h2>Feuilles Excel prévues</h2><p class="muted">Les exports sont scindés entre feuillus et résineux. Chaque groupe parcelle + essence + qualité est affecté à une feuille "Saisie ligne…".</p><div id="exportPlan"></div></div>
+  <div class="card actions">
+    <div class="lock-panel">
+      <span id="lockStatus" class="status open">Session en cours</span>
+      <button id="toggleLock" class="secondary">Verrouiller la session</button>
+    </div>
+    <button id="exportModele" class="primary">Exporter vers le modèle Excel</button>
+    <button id="exportJson" class="secondary">💾 Sauvegarder la session JSON</button>
+    <button id="importJson" class="secondary">📥 Importer une session JSON</button>
+    <input id="importJsonInput" type="file" accept="application/json" class="hidden">
+    <button id="exportCsv">Exporter CSV listing</button>
+    <div class="sig-export-panel">
+      <h3>Exports SIG</h3>
+      <p class="muted">Exports des arbres géoréférencés. Les points sont liés au numéro d’arbre ; le KML applique une couleur par essence et affiche le numéro.</p>
+      <button id="exportGeoJson" class="secondary">Exporter GeoJSON</button>
+      <button id="exportKml" class="secondary">Exporter KML</button>
+      <button id="exportGpx" class="secondary">Exporter GPX</button>
+      <button id="exportCsvXY" class="secondary">Exporter CSV XY</button>
+      <button id="exportSigAll" class="secondary">Exporter tous les formats SIG</button>
+    </div>
+    <button id="printPdf" class="hidden" type="button" aria-hidden="true">Exporter PDF</button>
+    <button id="clearAll" class="danger">⚠️ Réinitialisation de la session</button>
+  </div>
+  <div class="card"><h2>Historique des exports</h2><div id="exportHistory"></div></div>
+</section>
+
+<!-- ─── MODE D'EMPLOI ─────────────────────────────────────── -->
+<section id="modeEmploi" class="tab active">
+  <div class="guide-premium-hero">
+    <div class="guide-brand"><img src="logo-foreval-preview.png" alt="ForEval" class="guide-logo"></div>
+    <div class="guide-kicker">Mode d'emploi terrain</div>
+    <h2>📘 ForEval Cubage 1.2.01 en 30 secondes</h2>
+    <p>Créez une session, saisissez les arbres, contrôlez la liste, la carte et la synthèse, puis exportez vers Excel ou SIG en fin de parcelle.</p>
+    <button id="startGuideSession" class="primary guide-start">+ Commencer une nouvelle session</button>
+  </div>
+  <div class="guide-flow">
+    <div class="guide-step"><div class="guide-icon">🗂️</div><div><strong>1. Créer une session</strong><span>Une session correspond à une propriété, un chantier ou une opération de martelage. Elle est sauvegardée automatiquement.</span></div></div>
+    <div class="guide-step"><div class="guide-icon">✍️</div><div><strong>2. Renseigner les paramètres</strong><span>Indiquez le nom du fichier, le martelage, les observations et les points importants avant la saisie.</span></div></div>
+    <div class="guide-step"><div class="guide-icon">🌳</div><div><strong>3. Saisir les arbres</strong><span>Pour chaque arbre : parcelle, essence, qualité éventuelle, diamètre à 1,30 m et hauteur bois d'œuvre.</span></div></div>
+    <div class="guide-step"><div class="guide-icon">⭐</div><div><strong>4. Gérer le chêne supérieur</strong><span>La hauteur de qualité supérieure est saisie séparément et envoyée vers la feuille "Plus-value qualité 1".</span></div></div>
+    <div class="guide-step"><div class="guide-icon">📊</div><div><strong>5. Contrôler avant export</strong><span>Vérifiez la synthèse, les derniers arbres modifiables et les feuilles Excel prévues.</span></div></div>
+    <div class="guide-step"><div class="guide-icon">📤</div><div><strong>6. Exporter puis verrouiller</strong><span>Exportez en fin de parcelle. Verrouillez la session si vous souhaitez éviter toute modification accidentelle.</span></div></div>
+  </div>
+  <div class="guide-tips">
+    <div class="tip-card"><strong>🌧️ Mode pluie</strong><span>Augmente les zones tactiles lorsque les conditions sont mauvaises.</span></div>
+    <div class="tip-card"><strong>🖐️ Gros doigts</strong><span>Affiche des boutons encore plus larges pour une saisie plus confortable sur iPad.</span></div>
+    <div class="tip-card"><strong>📋 Feuille Tarifs</strong><span>Les choix de tarifs feuillus et résineux sont regroupés dans un onglet dédié.</span></div><div class="tip-card"><strong>🗺️ Carte</strong><span>Les arbres géoréférencés apparaissent avec leur numéro et une couleur par essence.</span></div>
+    <div class="tip-card"><strong>📶 Avant de partir</strong><span>Au bureau, en Wi-Fi : onglet Carte, cadrez la propriété, « Enregistrer la zone affichée ». Les fonds IGN marcheront sans réseau.</span></div>
+    <div class="tip-card"><strong>🔆 Trace GPS</strong><span>Pendant la trace, l’écran reste allumé. Ne verrouillez pas l’iPad avec le bouton : iOS couperait le GPS. Si l’appli se ferme, la trace reprend seule au retour.</span></div>
+    <div class="tip-card"><strong>💾 Données</strong><span>Tout est enregistré sur l’appareil à chaque arbre, avec des copies de secours (onglet Sessions). Exportez quand même le JSON en fin de journée.</span></div>
+  </div>
+</section>
+
+<section id="printArea" class="print-only"></section>
+</main>
+
+<script src="jszip.min.js"></script>
+<script src="tarifs.js"></script>
+<script src="vendor/leaflet/leaflet.js"></script>
+<!-- storage.js charge les sessions puis lance app.js, veille.js, trace.js, carte-hors-ligne.js et pwa-update.js -->
+<script src="storage.js"></script>
+</body>
+</html>

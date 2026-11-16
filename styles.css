@@ -1,0 +1,757 @@
+:root{
+  --bg:#f7f8f6;
+  --bg2:#f0f4ef;
+  --surface:#ffffff;
+  --surface-soft:#fbfcf8;
+  --ink:#17211b;
+  --muted:#647064;
+  --primary:#0E3B2E;
+  --primary-dark:#08281F;
+  --primary-soft:#E8F2EC;
+  --accent:#4DA6CB;
+  --line:#dde6dc;
+  --shadow:0 10px 26px rgba(20,32,25,.08);
+  --shadow-soft:0 3px 12px rgba(20,32,25,.055);
+  --danger:#b2372f;
+  --danger-soft:#fff0ee;
+  --radius:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#f3f6f2 0%,#fafbf8 42%,#ffffff 100%);
+  color:var(--ink);
+  min-height:100vh;
+}
+header{
+  padding:calc(14px + env(safe-area-inset-top)) 18px 16px;
+  color:white;
+  background:
+    radial-gradient(circle at 20% 10%,rgba(255,255,255,.24),transparent 28%),
+    linear-gradient(135deg,var(--primary-dark),var(--primary));
+  box-shadow:0 6px 18px rgba(22,75,51,.18);
+}
+h1{margin:0;font-size:27px;line-height:1;font-weight:900;letter-spacing:-.04em}
+header p{margin:7px 0 0;opacity:.88;font-size:13px;line-height:1.35}
+nav{
+  display:flex;
+  gap:8px;
+  padding:8px 10px;
+  background:rgba(246,247,243,.88);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  position:sticky;
+  top:0;
+  z-index:5;
+  border-bottom:1px solid rgba(221,230,220,.9);
+  overflow-x:auto;
+}
+nav button{
+  flex:1 0 auto;
+  min-width:max-content;
+  padding:10px 13px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.86);
+  color:var(--ink);
+  font-weight:850;
+  box-shadow:var(--shadow-soft);
+}
+nav button.active{
+  background:var(--primary);
+  border-color:var(--primary);
+  color:white;
+  box-shadow:0 8px 20px rgba(31,107,69,.25);
+}
+main{padding:10px;max-width:920px;margin:0 auto 36px}.tab{display:none}.tab.active{display:block}
+.card{
+  background:rgba(255,255,255,.92);
+  border:1px solid rgba(221,230,220,.95);
+  border-radius:var(--radius);
+  padding:14px;
+  margin:10px 0;
+  box-shadow:var(--shadow-soft);
+}
+.card:first-child{margin-top:10px}
+h2{font-size:17px;line-height:1.15;margin:0 0 12px;font-weight:900;letter-spacing:-.02em}
+h3{font-size:14px;margin:12px 0 7px;font-weight:850;color:#26372b}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.section-head h2{margin:0}.mini.plus{width:38px;height:38px;border-radius:14px;background:var(--primary);color:#fff;border:0;font-size:22px;line-height:1;box-shadow:0 8px 18px rgba(31,107,69,.22)}.muted{color:var(--muted);font-size:13px;line-height:1.35}.one-line{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1/-1;margin:4px 0 0}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.grid.small{grid-template-columns:repeat(6,1fr)}.essence-grid{grid-template-columns:repeat(4,1fr)}.diameter-grid{grid-template-columns:repeat(6,1fr)}
+.buttons button{
+  min-height:30px;
+  padding:6px 4px;
+  border-radius:11px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,#fff,#f8faf6);
+  color:var(--ink);
+  font-weight:850;
+  font-size:11px;
+  line-height:1.1;
+  box-shadow:none;
+}
+.buttons button:active{transform:scale(.985)}
+.buttons button.selected{
+  background:linear-gradient(135deg,var(--primary),#258555);
+  color:white;
+  border-color:transparent;
+  box-shadow:0 8px 18px rgba(31,107,69,.24);
+}
+.buttons button.blank{border-style:dashed;color:var(--primary);background:var(--primary-soft)}
+input,select,textarea{
+  width:100%;padding:12px 13px;border-radius:14px;border:1px solid var(--line);
+  font-size:16px;background:#fff;color:var(--ink);outline:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(31,107,69,.12)}
+label{display:block;font-size:13px;font-weight:850;color:#344339;margin:12px 0 6px}textarea{min-height:92px;resize:vertical}.picker{margin-top:12px;padding:12px;border:1px dashed #cddbcc;border-radius:16px;background:var(--surface-soft)}
+.parcel-wrap{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center}.parcel-wrap>button:first-child{width:100%}
+.primary,.secondary,.danger,.actions button{
+  min-height:48px;border-radius:16px;font-weight:900;font-size:16px;
+}
+.primary{background:linear-gradient(135deg,var(--primary),#268957);color:white;border:0;width:100%;padding:14px;box-shadow:0 10px 22px rgba(31,107,69,.25)}
+.secondary{background:white;color:var(--primary);border:1px solid var(--line);width:100%;padding:12px;margin-top:8px}.secondary:hover{background:var(--primary-soft)}
+.danger{background:linear-gradient(135deg,var(--danger),#8f2c25)!important;color:white!important;border:0!important;padding:14px;box-shadow:0 10px 22px rgba(178,55,47,.18)}
+.actions button{margin:6px 0;width:100%;padding:14px;border:1px solid var(--line);background:white}.actions button.primary{border:0;background:linear-gradient(135deg,var(--primary),#268957)}
+.hidden{display:none!important}.result{border-color:rgba(31,107,69,.22);background:linear-gradient(180deg,#fff,#f6fbf7)}.result strong{font-size:21px;color:var(--primary-dark)}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:14px;overflow:hidden;border-radius:14px}th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:right;background:white}th{background:var(--primary-soft);font-weight:900;color:#26372b}th:first-child,td:first-child{text-align:left}tr:last-child td{border-bottom:0}
+.tree{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:10px;margin:8px 0;background:#fff;box-shadow:0 2px 10px rgba(20,32,25,.04)}
+.tree-actions{display:flex;gap:6px}.mini{border:1px solid var(--line);background:white;border-radius:12px;padding:8px 10px;font-weight:900}.mini.danger{background:var(--danger);color:white;border:0;padding:8px 10px}.export-sheet{border:1px solid var(--line);border-radius:16px;background:#fff;padding:10px;margin:8px 0}.print-only{display:none}
+@media(min-width:700px){main{padding:18px}.grid{grid-template-columns:repeat(8,1fr)}.essence-grid{grid-template-columns:repeat(8,1fr)}.grid.small,.diameter-grid{grid-template-columns:repeat(12,1fr)}.card{padding:18px}}
+@media print{header,nav,#saisie,#liste,#synthese,#parametres,#sessions,#parametrages,#modeEmploi{display:none!important}body{background:white}main{max-width:none;padding:0}.print-only{display:block}.print-page{page-break-after:always;padding:16px}.print-page h1{font-size:22px;color:#162318}.print-page table{font-size:12px}.print-page .totals{margin:12px 0;font-weight:700}}
+
+/* Interface — base compacte */
+.card{box-shadow:var(--shadow-soft);}
+.buttons button{letter-spacing:-.01em;}
+nav button{box-shadow:none;}
+.tree,.export-sheet{box-shadow:none;}
+@media(max-width:430px){.one-line{font-size:12px}.grid{gap:5px}.buttons button{font-size:10.5px}}
+
+
+/* Interface — titres compacts */
+h1{font-size:24px;}
+header p{font-size:12px;}
+h2{font-size:14px;line-height:1.12;margin-bottom:9px;}
+h3{font-size:12.5px;margin:9px 0 6px;}
+.card{padding:12px;}
+.picker input{margin-top:8px;}
+@media(max-width:430px){h1{font-size:22px}h2{font-size:13.5px}.card{padding:11px}}
+
+/* Sessions — verrouillage, historique, mode pluie */
+.header-line{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.glove-toggle{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:9px 11px;font-weight:900;white-space:nowrap}
+.status{display:inline-block;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:900;margin-left:6px}.status.open{background:var(--primary-soft);color:var(--primary-dark)}.status.locked{background:#fff3ce;color:#7b5414}.lock-panel{border:1px solid var(--line);border-radius:16px;padding:10px;margin-bottom:8px;background:#fff}.lock-panel .secondary{margin-top:8px}
+button:disabled,input:disabled,select:disabled,textarea:disabled{opacity:.55;filter:grayscale(.2);cursor:not-allowed}
+body.glove-mode .buttons button{min-height:46px;font-size:14px;padding:10px 7px;border-radius:15px}
+body.glove-mode .grid{gap:9px}body.glove-mode .mini{padding:11px 13px;font-size:15px}body.glove-mode .primary,body.glove-mode .secondary,body.glove-mode .danger,body.glove-mode .actions button{min-height:58px;font-size:18px;border-radius:18px}body.glove-mode h2{font-size:16px}body.glove-mode nav button{padding:13px 16px;font-size:15px}
+@media(max-width:430px){.header-line{align-items:flex-start}.glove-toggle{font-size:12px;padding:8px 9px}body.glove-mode .buttons button{font-size:13px}}
+
+
+/* Navigation — session, feedback, mode d’emploi */
+.session-badge{
+  display:inline-block;
+  margin-top:7px;
+  padding:4px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.22);
+  font-size:12px;
+  font-weight:850;
+}
+.feedback-toast{
+  position:fixed;
+  left:50%;
+  bottom:76px;
+  transform:translateX(-50%);
+  z-index:999;
+  background:rgba(24,59,42,.96);
+  color:white;
+  padding:10px 14px;
+  border-radius:999px;
+  font-weight:900;
+  box-shadow:0 12px 28px rgba(0,0,0,.22);
+  max-width:88vw;
+  text-align:center;
+}
+.guide-hero{
+  margin:10px 0;
+  padding:18px;
+  border-radius:22px;
+  color:#fff;
+  background:radial-gradient(circle at 20% 10%,rgba(255,255,255,.25),transparent 25%),linear-gradient(135deg,var(--primary-dark),var(--primary));
+  box-shadow:0 12px 28px rgba(31,107,69,.18);
+}
+.guide-hero h2{color:#fff;font-size:21px;margin-bottom:7px}
+.guide-hero p{margin:0;opacity:.9;line-height:1.35}
+.guide-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.guide-card{
+  background:rgba(255,255,255,.94);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:14px;
+  box-shadow:var(--shadow-soft);
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.guide-card strong{font-size:14px}
+.guide-card span{font-size:13px;line-height:1.35;color:var(--muted)}
+@media(min-width:720px){.guide-grid{grid-template-columns:1fr 1fr}}
+
+/* Terrain — modes pluie / gros doigts et multi-qualités */
+.mode-toggles{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.mode-toggles .glove-toggle{font-size:12px;padding:8px 9px}
+.quality-resume{margin:8px 0 0;font-weight:750;color:var(--primary-dark)}
+body.big-fingers-mode .buttons button{min-height:66px;font-size:18px;padding:14px 10px;border-radius:18px}
+body.big-fingers-mode .grid{gap:12px}
+body.big-fingers-mode .primary,body.big-fingers-mode .secondary,body.big-fingers-mode .danger,body.big-fingers-mode .actions button{min-height:68px;font-size:20px;border-radius:22px}
+body.big-fingers-mode nav button{padding:16px 18px;font-size:17px}
+body.big-fingers-mode h2{font-size:18px}
+@media(max-width:430px){.mode-toggles{gap:4px}.mode-toggles .glove-toggle{font-size:11px;padding:7px 8px}body.big-fingers-mode .buttons button{font-size:16px;min-height:58px}}
+
+/* Mode d’emploi — accueil premium */
+.guide-premium-hero{
+  margin:10px 0 14px;
+  padding:22px 18px;
+  border-radius:26px;
+  color:#fff;
+  background:
+    radial-gradient(circle at 18% 8%,rgba(255,255,255,.28),transparent 26%),
+    radial-gradient(circle at 90% 0%,rgba(215,154,43,.35),transparent 28%),
+    linear-gradient(135deg,var(--primary-dark),var(--primary));
+  box-shadow:0 16px 34px rgba(31,107,69,.22);
+  border:1px solid rgba(255,255,255,.14);
+}
+.guide-kicker{
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.25);
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+.guide-premium-hero h2{color:#fff;font-size:25px;margin:0 0 8px;letter-spacing:-.03em}
+.guide-premium-hero p{margin:0 0 14px;opacity:.92;line-height:1.4;font-size:14px;max-width:720px}
+.guide-start{
+  margin-top:4px;
+  background:linear-gradient(135deg,#fff,#edf8ef)!important;
+  color:var(--primary-dark)!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.16)!important;
+}
+.guide-flow{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0}
+.guide-step{
+  display:grid;
+  grid-template-columns:48px 1fr;
+  gap:12px;
+  align-items:start;
+  background:rgba(255,255,255,.96);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:13px;
+  box-shadow:var(--shadow-soft);
+}
+.guide-icon{
+  width:48px;height:48px;border-radius:17px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,var(--primary-soft),#fff);
+  border:1px solid rgba(31,107,69,.12);
+  font-size:23px;
+}
+.guide-step strong{display:block;font-size:15px;margin:1px 0 5px;color:var(--primary-dark)}
+.guide-step span{display:block;font-size:13px;line-height:1.38;color:var(--muted)}
+.guide-tips{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0 4px}
+.tip-card{
+  padding:13px;
+  border-radius:18px;
+  background:var(--surface-soft);
+  border:1px dashed #cddbcc;
+}
+.tip-card strong{display:block;font-size:14px;margin-bottom:5px;color:#26372b}
+.tip-card span{display:block;font-size:13px;line-height:1.35;color:var(--muted)}
+@media(min-width:720px){
+  .guide-flow{grid-template-columns:1fr 1fr}
+  .guide-tips{grid-template-columns:1fr 1fr 1fr}
+  .guide-premium-hero{padding:28px}
+  .guide-premium-hero h2{font-size:31px}
+}
+
+
+/* Tarifs — réglage V45 résineux */
+.resineux-settings{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:18px;background:var(--surface-soft)}
+.tariff-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+.tariff-row{display:grid;grid-template-columns:1fr;gap:6px;padding:10px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.tariff-row label{margin:0;font-weight:900;color:var(--primary-dark)}
+.tariff-row input{min-height:44px}
+.tariff-result{display:flex;align-items:center;justify-content:space-between;gap:8px;border-radius:12px;background:var(--primary-soft);padding:8px 10px;color:var(--primary-dark)}
+.tariff-result strong{font-size:15px}.tariff-result span{font-size:12px;color:var(--muted);font-weight:800}
+@media(min-width:720px){.tariff-grid{grid-template-columns:1fr 1fr}.tariff-row{grid-template-columns:1fr 150px 150px;align-items:center}.tariff-row input{padding:10px 12px}}
+
+
+/* Export — séparation feuillus / résineux */
+.export-section{
+  margin:12px 0;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:var(--surface-soft);
+}
+.export-section h3{
+  margin:2px 0 8px;
+  font-size:14px;
+  color:var(--primary-dark);
+}
+
+/* Synthèse — contrôles terrain et préparation tarifs */
+.preview-cumul{margin-top:8px;padding:8px 10px;border-radius:12px;background:var(--primary-soft);color:var(--primary-dark)}
+.terrain-card{padding:12px;border:1px solid var(--line);border-radius:16px;background:#fff;margin:8px 0}
+.terrain-card ul{margin:8px 0 0 18px;padding:0;color:var(--muted);font-size:13px;line-height:1.45}
+.tariff-prep-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.tariff-prep{padding:11px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.tariff-prep strong{display:block;color:var(--primary-dark)}
+.tariff-prep span{display:inline-block;margin:5px 0;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:900;background:var(--primary-soft);color:var(--primary-dark)}
+.tariff-prep.prepared span{background:#fff3ce;color:#7b5414}
+.tariff-prep p{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.35}
+.tariff-row-v173 select{min-height:44px;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:800}
+@media(min-width:720px){.tariff-prep-grid{grid-template-columns:1fr 1fr}.tariff-row-v173{grid-template-columns:1fr 130px 170px 1fr!important}}
+/* ============================================================
+   ForEval Cubage — compatibilité iPad / téléphone : scroll sécurisé
+   Ajouter ce fichier APRÈS styles.css dans index.html
+   ============================================================ */
+
+/* ── Variables supplémentaires ── */
+:root {
+  --nav-h: 52px;
+  --header-h: 72px;
+  --col-left: 58%;
+  --col-right: 42%;
+  --pad: 10px;
+}
+
+/* ── Hauteur plein écran pour la page ── */
+html, body {
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Header compact ── */
+@media (min-width: 768px) and (pointer: coarse),
+       (min-width: 768px) and (-webkit-min-device-pixel-ratio: 1) {
+
+  header {
+    padding: 10px 18px;
+  }
+  h1 { font-size: 18px; }
+  header p { font-size: 11px; margin-top: 2px; }
+  .session-badge { font-size: 11px; padding: 2px 7px; }
+  .glove-toggle { font-size: 11px; padding: 6px 8px; }
+
+  /* ── Nav compacte ── */
+  nav {
+    padding: 5px 10px;
+    gap: 6px;
+  }
+  nav button {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+
+  /* ── Main : hauteur restante calculée ── */
+  main {
+    height: calc(100vh - var(--header-h) - var(--nav-h));
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  /* ── Onglets non-saisie : scrollables normalement ── */
+  .tab {
+    height: 100%;
+    overflow-y: auto;
+    padding: 10px 14px;
+    box-sizing: border-box;
+  }
+
+  /* ════════════════════════════════════════════════════════
+     ONGLET SAISIE — layout deux colonnes fixes, zéro scroll
+     ════════════════════════════════════════════════════════ */
+  #saisie.tab {
+    display: none;
+    padding: 0;
+    overflow: hidden;
+  }
+  #saisie.tab.active {
+    display: grid;
+    grid-template-columns: var(--col-left) var(--col-right);
+    grid-template-rows: 100%;
+    height: 100%;
+  }
+
+  /* Colonne gauche : tous les cards de saisie empilés */
+  #saisie .col-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 6px 8px 10px;
+    overflow-y: auto;        /* scroll interne si nécessaire */
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Colonne droite : prévisualisation + derniers arbres */
+  #saisie .col-right {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px 8px 6px;
+    overflow: hidden;
+    height: 100%;
+    box-sizing: border-box;
+    border-left: 1px solid var(--line);
+    background: linear-gradient(180deg, #f6fbf7, #fafcf8);
+  }
+
+  /* Cards dans les colonnes */
+  #saisie .card {
+    margin: 0;
+    flex-shrink: 0;
+    padding: 8px 10px;
+  }
+
+  /* Le card "résultat" (col droite) prend l'espace restant */
+  #saisie .card.result {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #saisie .card.result #preview {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 13px;
+  }
+
+  /* Le card des derniers arbres : scrollable dans la colonne */
+  #saisie #lastTreesCard {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  #saisie #lastTreesCard h2 { flex-shrink: 0; }
+  #saisie #lastTreesCard #lastTrees {
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  /* Boutons de grille plus compacts sur iPad */
+  .buttons button {
+    min-height: 34px;
+    font-size: 12px;
+    padding: 5px 3px;
+    border-radius: 10px;
+  }
+  .grid { gap: 4px; }
+  .grid.small { grid-template-columns: repeat(8, 1fr); }
+  .diameter-grid { grid-template-columns: repeat(8, 1fr); }
+  .essence-grid { grid-template-columns: repeat(4, 1fr); }
+
+  /* Titres sections compacts */
+  h2 { font-size: 12px; margin-bottom: 6px; }
+  h3 { font-size: 11px; margin: 6px 0 4px; }
+
+  /* Boutons primaires/secondaires compacts */
+  .primary, .secondary, .danger, .actions button {
+    min-height: 38px;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 12px;
+  }
+  .secondary { margin-top: 5px; }
+
+  /* Card chêne supérieur compact */
+  #cheneSupCard .grid { gap: 3px; }
+
+  /* Muted plus petit */
+  .muted { font-size: 11px; }
+  .quality-resume { font-size: 11px; margin: 4px 0 0; }
+
+  /* Toast feedback */
+  .feedback-toast { bottom: 10px; font-size: 13px; padding: 8px 12px; }
+
+  /* Valeurs diamètre/hauteur dans les titres */
+  #diametreValue, #hauteurValue, #supHauteurValue {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--primary);
+  }
+
+  /* ── Mode gros doigts sur iPad ── */
+  body.big-fingers-mode .buttons button {
+    min-height: 50px;
+    font-size: 16px;
+  }
+  body.big-fingers-mode .grid { gap: 7px; }
+}
+
+/* ── iPad portrait (768-1024px) : colonnes 50/50 ── */
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    --col-left: 52%;
+    --col-right: 48%;
+  }
+  .grid.small { grid-template-columns: repeat(6, 1fr); }
+  .diameter-grid { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* ── iPad Pro paysage (≥1024px) : 60/40 ── */
+@media (min-width: 1025px) {
+  :root {
+    --col-left: 60%;
+    --col-right: 40%;
+  }
+  .grid.small { grid-template-columns: repeat(10, 1fr); }
+  .diameter-grid { grid-template-columns: repeat(10, 1fr); }
+}
+
+
+/* Feuille Tarifs — feuillus et résineux */
+.feuillus-settings{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:18px;background:var(--surface-soft)}
+.feuillus-tariff-row select{min-height:44px;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:800}
+@media(min-width:720px){.feuillus-tariff-row{grid-template-columns:1fr 190px 1fr!important;align-items:center}}
+
+
+/* ForEval Cubage 1.2.0 — résineux multi-tarifs */
+.resineux-method-row select{min-height:44px;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:800}
+@media(min-width:920px){.resineux-method-row{grid-template-columns:1fr 170px 140px 170px 1fr!important;align-items:center}}
+
+/* 1.2.2 — commentaire arbre et export manager */
+.tree-comment{min-height:72px;font-size:15px}.export-diagnostic{font-size:12px;color:var(--muted);margin-top:6px}
+@media(min-width:768px){#commentCard textarea{min-height:54px}}
+
+
+/* ForEval Cubage 1.3.0 — onglet Liste */
+.list-controls{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0 12px}
+.tree-list-table{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tree-list{min-width:980px}
+.tree-list th,.tree-list td{vertical-align:top;font-size:13px}
+.tree-list td:nth-child(4),.tree-list td:nth-child(5),.tree-list td:nth-child(7){text-align:right;font-weight:800}
+.list-comment{min-height:42px;height:42px;resize:vertical;font-size:13px;padding:8px 10px;border-radius:12px}
+.list-actions{display:flex;gap:5px;justify-content:flex-end;align-items:flex-start;flex-wrap:wrap}
+.list-actions .mini{padding:7px 9px;font-size:12px}
+@media(min-width:760px){.list-controls{grid-template-columns:1fr 1fr 1.2fr}}
+@media(max-width:520px){.tree-list{min-width:860px}.list-actions{min-width:120px}}
+
+
+/* ForEval Cubage 1.3.3 — ajout par lot */
+.batch-row{margin:10px 0 8px;padding:10px;border:1px solid var(--line);border-radius:16px;background:#fff;display:grid;grid-template-columns:1fr 110px;gap:10px;align-items:center}
+.batch-row label{margin:0;font-weight:900;color:var(--primary-dark);font-size:13px}
+.batch-row input{min-height:44px;text-align:center;font-weight:900;font-size:18px}
+@media(max-width:430px){.batch-row{grid-template-columns:1fr 88px}.batch-row input{font-size:17px}}
+
+
+/* GPS — ForEval Cubage 1.4.0 */
+.gps-status{
+  display:inline-block;
+  margin-top:6px;
+  padding:4px 9px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+}
+.gps-status.gps-on{background:rgba(229,243,234,.22);color:#fff}
+.gps-status.gps-search{background:rgba(255,243,206,.22);color:#fff}
+.gps-status.gps-off{background:rgba(255,255,255,.10);color:rgba(255,255,255,.88)}
+.tree-list th:nth-child(10), .tree-list td:nth-child(10){min-width:160px;white-space:nowrap;font-size:12px}
+.tree-list th:nth-child(11), .tree-list td:nth-child(11){min-width:80px;white-space:nowrap;font-size:12px}
+@media(max-width:720px){.gps-status{font-size:11px;padding:3px 7px}.tree-list{font-size:12px}}
+
+/* ForEval Cubage 1.4.1 — Exports SIG */
+.sig-export-panel{
+  margin:12px 0;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:var(--surface-soft);
+}
+.sig-export-panel h3{margin:0 0 6px;color:var(--primary-dark)}
+.sig-export-panel .secondary{margin-top:7px}
+
+/* ForEval Cubage 1.5.0 — cartographie interactive */
+.map-card{padding-bottom:16px}
+.map-toolbar{display:grid;grid-template-columns:1fr;gap:8px;margin:10px 0 8px}
+.map-toolbar .secondary{margin-top:0}
+.map-toolbar label{margin:0;font-size:12px}
+.map-status{margin:8px 0 10px;font-weight:800;color:var(--primary-dark)}
+.tree-map{height:62vh;min-height:420px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#e8eee7;box-shadow:var(--shadow-soft)}
+.tree-map-icon{background:transparent;border:0}
+.tree-map-icon div{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--tree-color,#236a46);color:#fff;border:2px solid #fff;box-shadow:0 3px 12px rgba(0,0,0,.25);font-size:12px;font-weight:950;line-height:1}
+.map-popup h3{margin:0 0 6px;font-size:15px;color:var(--primary-dark)}
+.map-popup table{font-size:12px;border-radius:10px;margin-bottom:8px}.map-popup td{padding:4px 6px}.map-popup .mini{width:100%}
+@media(min-width:860px){.map-toolbar{grid-template-columns:1fr 1fr 1.1fr 1fr 1fr 1fr;align-items:end}.tree-map{height:68vh}}
+@media(max-width:520px){.tree-map{height:58vh;min-height:360px;border-radius:16px}.tree-map-icon div{width:30px;height:30px;font-size:11px}.map-toolbar{gap:6px}}
+
+/* ForEval Cubage 1.8.1 — fonds cartographiques et surcouches */
+.map-overlays{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:8px 0 10px;
+}
+.map-overlays label{
+  margin:0;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#fff;
+  font-size:12px;
+  font-weight:850;
+  color:var(--primary-dark);
+}
+.map-overlays input{width:auto;box-shadow:none;padding:0;}
+.tree-map-icon.no-number div{font-size:0;}
+.tree-map-icon.no-number div::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff;display:block;}
+
+/* 1.5.1e — commentaire arbre compact et optionnel */
+#commentCard{padding:7px 10px;margin:6px 0;}
+#commentCard h2{font-size:12px;margin:0 0 5px;display:flex;justify-content:space-between;align-items:center;}
+#commentCard h2::after{content:"optionnel";font-size:11px;color:var(--muted);font-weight:850;}
+#commentCard .tree-comment{min-height:34px;height:34px;padding:8px 10px;font-size:13px;border-radius:12px;resize:vertical;}
+#commentCard .tree-comment:focus{height:72px;}
+
+
+/* ForEval Cubage 1.6.1 — finalisation identité ForEval */
+:root{
+  --foreval-green-deep:#0E3B2E;
+  --foreval-green:#14533E;
+  --foreval-green-soft:#3F6A4F;
+  --foreval-blue:#4DA6CB;
+  --foreval-blue-soft:#78C0DA;
+  --foreval-ink:#252A32;
+  --foreval-paper:#FFFFFF;
+}
+header{
+  background:
+    radial-gradient(circle at 18% 10%, rgba(255,255,255,.20), transparent 24%),
+    linear-gradient(135deg, var(--foreval-green-deep) 0%, var(--foreval-green) 54%, #1E6A50 100%);
+}
+.brand-lockup{display:flex;align-items:center;gap:12px;min-width:0}
+.brand-symbol{width:46px;height:46px;object-fit:contain;filter:drop-shadow(0 5px 12px rgba(0,0,0,.18))}
+.brand-lockup h1{letter-spacing:-.045em;color:#fff}
+.brand-lockup p{color:rgba(255,255,255,.88)}
+nav button.active,
+.primary,
+.actions button.primary,
+.buttons button.selected{
+  background:linear-gradient(135deg,var(--foreval-green-deep),var(--foreval-green))!important;
+  border-color:transparent!important;
+}
+.secondary,
+.actions button{color:var(--foreval-green-deep)}
+.buttons button.blank{color:var(--foreval-green-deep);background:#E8F2EC;border-color:#D4E4D8}
+.guide-premium-hero{
+  background:
+    radial-gradient(circle at 86% 0%, rgba(77,166,203,.30), transparent 28%),
+    radial-gradient(circle at 16% 6%, rgba(255,255,255,.26), transparent 24%),
+    linear-gradient(135deg,var(--foreval-green-deep),var(--foreval-green))!important;
+}
+.guide-brand{display:flex;align-items:center;margin-bottom:10px}
+.guide-logo{max-width:min(460px,92%);height:auto;display:block;background:rgba(255,255,255,.92);border-radius:18px;padding:12px 16px;box-shadow:0 12px 30px rgba(0,0,0,.14)}
+.guide-kicker{background:rgba(77,166,203,.20);border-color:rgba(255,255,255,.30)}
+.gps-status.gps-on,.status.open{background:rgba(77,166,203,.18)}
+.map-marker,.tree-dot{border-color:#fff}
+@media(max-width:520px){.brand-symbol{width:38px;height:38px}.brand-lockup{gap:9px}.guide-logo{max-width:100%;padding:10px 12px;border-radius:14px}}
+
+
+/* ForEval Cubage 1.6.1 — corrections ciblées contraste */
+#startGuideSession,
+#exportModele{
+  color:#ffffff!important;
+}
+
+
+/* ForEval Cubage 1.7.0 — ergonomie terrain */
+.keep-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:6px 0 8px;
+  padding:7px 9px;
+  border-radius:13px;
+  background:var(--surface-soft);
+  border:1px solid var(--line);
+  font-size:12px;
+  font-weight:850;
+  color:var(--primary-dark);
+}
+.keep-row input{
+  width:auto;
+  min-width:18px;
+  height:18px;
+  padding:0;
+  margin:0;
+  box-shadow:none;
+}
+.tree-comment{
+  min-height:42px;
+  height:42px;
+  font-size:14px;
+  padding:9px 11px;
+}
+#commentCard h2{margin-bottom:6px}
+@media(min-width:768px){#commentCard textarea{min-height:38px;height:38px}}
+
+
+/* ForEval Cubage 1.9.5 — trace de parcours GPS */
+.map-trace-panel{
+  margin:8px 0 10px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:var(--surface-soft);
+}
+.trace-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;color:var(--primary-dark)}
+.trace-pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 9px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:900;color:var(--muted)}
+.trace-pill.recording{background:rgba(77,166,203,.15);color:var(--foreval-green-deep);border-color:rgba(77,166,203,.35)}
+.trace-controls{display:grid;grid-template-columns:1fr;gap:7px;margin:7px 0}
+.trace-controls .secondary{margin-top:0}
+.trace-distance{display:grid;grid-template-columns:1fr 96px;align-items:center;gap:8px;margin:8px 0 6px;font-size:12px}
+.trace-distance select{padding:8px 10px;min-height:38px;font-size:14px}
+.trace-stats{font-weight:850;color:var(--primary-dark);margin-top:6px}
+.trace-exports{grid-template-columns:1fr;}
+@media(min-width:720px){.trace-controls{grid-template-columns:repeat(3,1fr)}.trace-exports{grid-template-columns:1fr 1fr}.trace-distance{max-width:420px}}
+
+/* ─── 1.2.01 : bandeaux, sécurité des données, carte hors ligne, veille ─── */
+.app-banner{position:sticky;top:0;z-index:2000;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:#0E3B2E;color:#fff;font-weight:800;font-size:14px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.app-banner.alert{background:#8f2c25}
+.app-banner .banner-actions{display:flex;gap:8px}
+.app-banner .primary,.app-banner .secondary{padding:8px 12px;min-height:0;font-size:14px}
+.app-banner .secondary{background:#fff;color:#0E3B2E}
+.danger-text{color:#8f2c25}
+.data-safety{margin:4px 0 10px;line-height:1.7}
+.map-offline-panel{border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin:10px 0;background:#fff}
+.offline-options{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:8px 0}
+.offline-options label{display:flex;align-items:center;gap:6px;font-weight:700;font-size:14px}
+.offline-progress{margin-top:6px;font-weight:700}
+.offline-progress.ok{color:var(--primary-dark)}
+.offline-progress.warn,.trace-wake.warn{color:#7b5414}
+.trace-wake{margin-top:6px;font-size:13px;font-weight:700}
+.trace-wake.ok{color:var(--primary-dark)}
+.net-pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:900;border:1px solid var(--line);background:#fff}
+.net-pill.online{color:var(--primary-dark)}
+.net-pill.offline{color:#7b5414;background:#fff3ce}
+.app-banner .primary{background:#fff!important;color:#0E3B2E!important;box-shadow:none;white-space:nowrap}
+.app-banner .secondary{background:transparent!important;color:#fff!important;border:1px solid rgba(255,255,255,.6)!important;white-space:nowrap}
+.offline-options label{display:inline-flex!important;flex-direction:row;align-items:center;white-space:nowrap;grid-template-columns:none}
+.offline-options label input[type=checkbox]{width:auto;min-height:0;margin:0}
+.offline-options select{width:auto;min-width:150px}

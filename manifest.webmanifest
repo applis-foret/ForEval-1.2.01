@@ -1,0 +1,23 @@
+{
+  "name": "ForEval Cubage — cubage forestier",
+  "short_name": "ForEval Cubage",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#0E3B2E",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "description": "ForEval Cubage 1.2.01 — application terrain de cubage forestier : carte et données hors ligne, trace GPS de parcours."
+}
